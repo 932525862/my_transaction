@@ -13,6 +13,7 @@
 
 .phone-input input{
   outline: 0;
+  
 }
 
 .phone-input:focus-within{

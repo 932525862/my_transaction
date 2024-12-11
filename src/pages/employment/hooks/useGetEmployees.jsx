@@ -12,7 +12,7 @@ export const useEmployees = () => {
       const response = await EmployeeService.getAll();
       return response; 
     } catch (err) {
-      toast.error(err?.response?.data?.message || "Something went wrong!");
+      toast.error(err?.response?.data?.message || "");
       return null; 
     } finally {
       setIsLoading(false); 
