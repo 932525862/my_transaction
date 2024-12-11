@@ -11,7 +11,7 @@ export const Oylikhooks = () => {
       const response = await AnalyticsServis.getAll(startDate, endDate, setData); // Sanalarni API'ga yuborish
       return response.data;  
     } catch (err) {
-      toast.error(err?.response?.data?.message || "Something went wrong!");
+      toast.error(err?.response?.message || "Something went wrong!");
       return null; 
     } finally {
       setIsLoading(false); 

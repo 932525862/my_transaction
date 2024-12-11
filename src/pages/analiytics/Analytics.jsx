@@ -10,8 +10,9 @@ import { toast } from "react-toastify";
 
 const Analytics = () => {
   const { getHisobot, isLoading } = Oylikhooks();
-  const { analyticsData, error } = useAnalytics();
+  // const { analyticsData, error } = useAnalytics();
   const [productType, setProductType] = useState(null);
+  const [analyticsData, setAnalyticsData] = useState(null);
   const [productCount, setProductCount] = useState(null);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [dates, setDates] = useState([null, null]);
@@ -53,15 +54,30 @@ const Analytics = () => {
     return umumiy;
   };
 
-  
+  useEffect(() => {
+    // API orqali analitika ma'lumotlarini olish
+    const fetchAnalyticsData = async () => {
+      try {
+        const response = await api.get("/api/analytics"); // API endpoint
+        setAnalyticsData(response?.data); // Ma'lumotlarni holatga saqlash
+      } catch (error) {
+        console.error("Error fetching analytics data:", error);
+        toast.error("Ma'lumotlarni yuklashda xatolik yuz berdi!");
+      } finally {
+        setIsLoading(false); // Yuklashni tugatish
+      }
+    };
+
+    fetchAnalyticsData();
+  }, []);
 
   const getReadyProductResurs = async() => {
     if(productType && productCount){
       try {
-        const response = await api.get(`api/analytics/type/{id}?typeId=${productType}&count=${productCount}`);
+        const response = await api.get(`api/analytics/type?typeId=${productType}&count=${productCount}`);
         setDataResurs(response?.data?.data);
       } catch (err) {
-        toast.error("Xatolik yuz berdi")
+        toast.error("Xatolik yuz berdi.Qayta uruning")
       }
     }
   }
@@ -116,16 +132,14 @@ const Analytics = () => {
           <FaChartBar className="text-yellow-500 text-4xl mb-4" />
           <h2 className="text-xl font-semibold">Ishlab Chiqarilgan</h2>
           <p className="text-2xl font-bold">
-            {analyticsData?.totalProduced
-              ? `${analyticsData.totalProduced} dona`
-              : "Ma'lumot yo'q"}
+            {analyticsData?.totalProduced? `${analyticsData.totalProduced} dona`: "Ma'lumot yo'q"}
           </p>
         </div>
         <div className="bg-white p-6 rounded-lg shadow-lg">
           <FaShoppingCart className="text-blue-500 text-4xl mb-4" />
           <h2 className="text-xl font-semibold">Umumiy Sotilgan</h2>
           <p className="text-2xl font-bold">
-            {analyticsData?.totalSold
+          {analyticsData?.totalSold
               ? `${analyticsData.totalSold} dona`
               : "Ma'lumot yo'q"}
           </p>
@@ -134,8 +148,8 @@ const Analytics = () => {
           <FaDollarSign className="text-green-500 text-4xl mb-4" />
           <h2 className="text-xl font-semibold">Umumiy Tushum</h2>
           <p className="text-2xl font-bold">
-            {analyticsData?.totalProfit
-              ? `${analyticsData.totalProfit} so'm`
+          {analyticsData?.totalProfit
+              ? `${analyticsData.totalProfit.toLocaleString()} so'm`
               : "Ma'lumot yo'q"}
           </p>
         </div>
@@ -179,7 +193,7 @@ const Analytics = () => {
             onClick={() => getReadyProductResurs()}
             className="bg-blue-500 text-white px-6 py-3 rounded text-xl"
           >
-            Yuborish
+            Hisobotni ko'rish
           </button>
         </div>
 
@@ -187,11 +201,18 @@ const Analytics = () => {
           <div className="mt-6">
             <h4 className="font-semibold text-gray-800">Resurslar Hisoboti:</h4>
             <ul className="list-disc pl-6 mt-2">
-              {Object.entries(dataResurs).map(([key, value]) => (
+              {Object.entries(dataResurs?.resultObject)?.map(([key, value]) => (
                 <li key={key} className="text-gray-700">
                   {key}: {value} kg
                 </li>
               ))}
+              <li>
+                   Umumiy chiqim:{" "}
+                {
+                  dataResurs?.totalExpenditure
+                }{" "}
+                so'm
+              </li>
             </ul>
           </div>
         )}
