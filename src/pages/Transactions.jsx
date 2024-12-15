@@ -32,7 +32,7 @@ const Transactions = () => {
     <div>
       <h1 className="mb-4">Tranzaktsiyalar</h1>
       <Row>
-        {/* Chap tarafdagi forma border bilan */}
+      
         <Col md={6}>
           <Card className="p-4 border">
             <Card.Body>
@@ -101,7 +101,7 @@ const Transactions = () => {
           </Card>
         </Col>
 
-        {/* O'ng tarafdagi tranzaktsiyalar border va skroll bilan */}
+        
         <Col md={6}>
           <Card className="p-3 border">
             <Card.Title>Tranzaktsiyalar Tarix</Card.Title>

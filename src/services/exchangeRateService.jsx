@@ -1,5 +1,7 @@
-const API_KEY = "7ede3ad13ccb0dd6aa2245c8";  
-const BASE_URL = 'https://v6.exchangerate-api.com/v6';
+
+
+const API_KEY = import.meta.env.VITE_API_KEY;
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export const getExchangeRates = async (baseCurrency) => {
   try {
@@ -8,7 +10,7 @@ export const getExchangeRates = async (baseCurrency) => {
       throw new Error('Failed to fetch exchange rates');
     }
     const data = await response.json();
-    return data.conversion_rates;  // Return the conversion rates object
+    return data.conversion_rates;  
   } catch (error) {
     console.error('Error fetching exchange rates:', error);
     throw error;
